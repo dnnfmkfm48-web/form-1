@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#117A26">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Обход">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<title>Обход</title>
+<style>
+:root{--ink:#1E1F25;--muted:#6B6E78;--line:#E1E3E8;--acc:#117A26;--acc-soft:#E3F4E6;--neg:#C84A00;--neg-soft:#FDEDE3;--bg:#F5F6F8}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink)}
+body{font:16px/1.35 -apple-system,BlinkMacSystemFont,"SB Sans Text","Segoe UI",Roboto,Arial,sans-serif;-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent}
+#app{max-width:560px;margin:0 auto;padding:calc(10px + env(safe-area-inset-top)) 14px 110px}
+.head{font-size:13px;color:var(--muted);margin:2px 0 6px}
+h1{font-size:21px;margin:4px 0 4px;line-height:1.2}
+h2{font-size:17px;margin:18px 0 6px}
+.sub{color:var(--muted);font-size:14px;margin:0 0 10px}
+.note{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:14px;margin:10px 0;color:var(--ink)}
+.note.warn{background:var(--neg-soft);border-color:#F3C9AE}
+.note.okn{background:var(--acc-soft);border-color:#BFE3C6}
+.btn{display:flex;align-items:center;gap:10px;width:100%;min-height:52px;border:1px solid var(--line);background:#fff;border-radius:12px;font:inherit;font-size:17px;margin:8px 0;padding:11px 14px;text-align:left;color:var(--ink);cursor:pointer}
+.btn:active{filter:brightness(.95)}
+.btn.c{justify-content:center;text-align:center}
+.btn.ok{background:var(--acc);color:#fff;border-color:var(--acc);justify-content:center;font-weight:600}
+.btn.bad{background:var(--neg-soft);border-color:#F3C9AE;color:var(--neg);justify-content:center;font-weight:600}
+.btn.on{border-color:var(--acc);background:var(--acc-soft)}
+.btn.ghost{background:transparent;border-color:transparent;color:var(--muted);font-size:15px;min-height:40px;justify-content:center}
+.btn.small{min-height:44px;font-size:15px}
+.btn[disabled]{opacity:.45}
+.box{flex:0 0 22px;height:22px;border:2px solid #B9BCC6;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:#fff}
+.on .box{background:var(--acc);border-color:var(--acc)}
+.tag{font-size:12px;color:var(--neg);font-weight:600;margin-left:auto}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:8px 0}
+.grid.g5{grid-template-columns:repeat(5,1fr)}
+.grid.g2{grid-template-columns:repeat(2,1fr)}
+.grid .btn{margin:0;justify-content:center;text-align:center;padding:10px 4px}
+.bar{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);padding:10px 14px calc(10px + env(safe-area-inset-bottom));display:flex;gap:10px;justify-content:center}
+.bar .btn{margin:0;max-width:270px;justify-content:center}
+input.inp,textarea.inp{width:100%;font:inherit;font-size:18px;padding:12px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--ink)}
+textarea.inp{min-height:96px;resize:vertical;font-size:16px}
+input.big{font-size:28px;text-align:center;letter-spacing:2px}
+.err{color:var(--neg);font-weight:600;margin:8px 0}
+.thumbs{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+.thumbs img{width:76px;height:76px;object-fit:cover;border-radius:8px;border:1px solid var(--line);background:#eee}
+.row2{display:flex;gap:8px}.row2 .btn{flex:1;justify-content:center}
+.sum{background:#fff;border:1px solid var(--line);border-radius:12px;padding:4px 12px;margin:10px 0}
+.sum .it{padding:9px 0;border-bottom:1px solid var(--line);display:flex;gap:8px;align-items:flex-start}
+.sum .it:last-child{border-bottom:0}
+.sum .it .t{flex:1}
+.sum .it .e{flex:0 0 auto;font-size:14px;color:var(--acc);background:none;border:0;padding:4px 0 4px 8px;font-weight:600}
+.small{font-size:13px;color:var(--muted)}
+.list .btn{font-size:15px;min-height:46px}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--neg);flex:0 0 9px}
+.dot.sent{background:var(--acc)}
+.upd{position:fixed;left:10px;right:10px;top:calc(8px + env(safe-area-inset-top));z-index:5;background:var(--ink);color:#fff;border-radius:12px;padding:10px 12px;font-size:14px;display:flex;gap:10px;align-items:center}
+.rowc{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:6px 6px 6px 12px;margin:8px 0}
+.rowc .lb{flex:1;font-size:16px}.rowc .lb .small{display:block}
+.rowc .btn{width:auto;min-width:58px;margin:0;min-height:46px;justify-content:center;padding:6px 10px}
+.rowc.okr{background:var(--acc-soft);border-color:#BFE3C6}.rowc.bdr{background:var(--neg-soft);border-color:#F3C9AE}
+.upd button{margin-left:auto;background:#fff;color:var(--ink);border:0;border-radius:8px;padding:6px 10px;font:inherit;font-size:14px}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="bar" class="bar" style="display:none"></div>
+<script>
+'use strict';
+var LOCKED = {"salt":"7wCBrccbRBC15dO3aB5ZkQ==","nonce":"B7HSpLZ7Lz19GVgycmiZaQ==","it":200000,"ct":"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","tag":"/hhcnrCJWvJcGLnvlAOA9dluqWgCFjThUEA/BYYxq3A="};          // вопросы и список квартир, зашифрованы кодом доступа
+var VERSION = '20261119-a86efa';
+var FORMAT = 'obhod-1';
+var PART_LIMIT = 14 * 1024 * 1024;   // размер одного файла (почта и мессенджеры принимают)
+
+var CL = null, APTS = [], K = null, APT = {}, SECTIONS = [];
+function initData(data) {
+  CL = data.checklist; APTS = data.apartments; K = {apt: CL.apartment, mop: CL.mop}; APT = {}; SECTIONS = [];
+  APTS.forEach(function (a) { APT[a[0]] = {apt: a[0], sec: a[1], floor: a[2]}; if (SECTIONS.indexOf(a[1]) < 0) SECTIONS.push(a[1]); });
+  SECTIONS.sort(function (a, b) { return a - b; });
+}
+function b64(s) { var bin = atob(s), u = new Uint8Array(bin.length); for (var i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i); return u; }
+function unlock(code) {
+  // PBKDF2-SHA256 -> ключ шифрования и ключ проверки; поток HMAC-SHA256(ключ, nonce||счётчик)
+  var sub = crypto.subtle, salt = b64(LOCKED.salt), nonce = b64(LOCKED.nonce), ct = b64(LOCKED.ct), tag = b64(LOCKED.tag);
+  return sub.importKey('raw', new TextEncoder().encode(code), 'PBKDF2', false, ['deriveBits']).then(function (base) {
+    return sub.deriveBits({name: 'PBKDF2', hash: 'SHA-256', salt: salt, iterations: LOCKED.it}, base, 512);
+  }).then(function (bits) {
+    bits = new Uint8Array(bits);
+    return Promise.all([
+      sub.importKey('raw', bits.slice(0, 32), {name: 'HMAC', hash: 'SHA-256'}, false, ['sign']),
+      sub.importKey('raw', bits.slice(32), {name: 'HMAC', hash: 'SHA-256'}, false, ['verify'])]);
+  }).then(function (keys) {
+    var msg = new Uint8Array(salt.length + nonce.length + ct.length);
+    msg.set(salt, 0); msg.set(nonce, salt.length); msg.set(ct, salt.length + nonce.length);
+    return sub.verify('HMAC', keys[1], tag, msg).then(function (ok) {
+      if (!ok) throw new Error('code');
+      var n = Math.ceil(ct.length / 32), jobs = [];
+      for (var i = 0; i < n; i++) { var blk = new Uint8Array(nonce.length + 4); blk.set(nonce, 0); new DataView(blk.buffer).setUint32(nonce.length, i); jobs.push(sub.sign('HMAC', keys[0], blk)); }
+      return Promise.all(jobs);
+    });
+  }).then(function (ks) {
+    var out = new Uint8Array(ct.length);
+    ks.forEach(function (b, i) { var k = new Uint8Array(b); for (var j = 0; j < 32 && i * 32 + j < ct.length; j++) out[i * 32 + j] = ct[i * 32 + j] ^ k[j]; });
+    return JSON.parse(new TextDecoder().decode(out));
+  });
+}
+
+// ------------------------------------------------------------------ утилиты
+var LS = {
+  get: function (k, d) { try { var v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
+  set: function (k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { alert('Не удалось сохранить: память браузера заполнена'); } }
+};
+function pad(n) { return (n < 10 ? '0' : '') + n; }
+function now() { var d = new Date(); return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()) + ' ' + pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds()); }
+function dm(ts) { return ts ? ts.slice(8, 10) + '.' + ts.slice(5, 7) + ' ' + ts.slice(11, 16) : ''; }
+function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return {'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]; }); }
+function low(t) { return t ? t.charAt(0).toLowerCase() + t.slice(1) : t; }
+function uid() {
+  if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+  var s = ''; for (var i = 0; i < 32; i++) s += Math.floor(Math.random() * 16).toString(16);
+  return s.slice(0, 8) + '-' + s.slice(8, 12) + '-' + s.slice(12, 16) + '-' + s.slice(16, 20) + '-' + s.slice(20);
+}
+function clone(o) { return JSON.parse(JSON.stringify(o)); }
+function chunk(a, n) { var r = []; for (var i = 0; i < a.length; i += n) r.push(a.slice(i, i + n)); return r; }
+
+// ------------------------------------------------------------------ чек-лист
+function blocks(kind) { return K[kind].blocks; }
+function block(kind, i) { return K[kind].blocks[i]; }
+function bindex(kind, code) { var b = blocks(kind); for (var i = 0; i < b.length; i++) if (b[i].code === code) return i; return -1; }
+function problems(kind, i, unit) { var b = block(kind, i); var ps = (b.problems || []).slice(); if (unit && b.unit_extra && b.unit_extra[unit]) ps = ps.concat(b.unit_extra[unit]); return ps; }
+function plabel(kind, bcode, pcode, unit) {
+  if (pcode === 'other') return 'Другое';
+  var ps = problems(kind, bindex(kind, bcode), unit);
+  for (var i = 0; i < ps.length; i++) if (ps[i].code === pcode) return ps[i].label;
+  return pcode;
+}
+function ulabel(kind, bcode, ucode) { var us = block(kind, bindex(kind, bcode)).units || []; for (var i = 0; i < us.length; i++) if (us[i].code === ucode) return us[i].label; return ucode; }
+function isUrgent(kind, bcode, pcode, unit) { var ps = problems(kind, bindex(kind, bcode), unit); for (var i = 0; i < ps.length; i++) if (ps[i].code === pcode) return !!ps[i].urgent; return false; }
+function rooms(kind, i) { var rs = block(kind, i).rooms; return rs ? (CL.rooms[rs] || []) : []; }
+function labelOf(list, code) { for (var i = 0; i < list.length; i++) if (list[i].code === code) return list[i].label; return code || ''; }
+function whole(kind) { return kind === 'apt' ? 'Вся квартира' : 'Весь этаж'; }
+
+// ------------------------------------------------------------------ хранилище (IndexedDB)
+var IDB = null;
+function idbOpen() {
+  return new Promise(function (res, rej) {
+    var r = indexedDB.open('obhod', 1);
+    r.onupgradeneeded = function () { var d = r.result; d.createObjectStore('records', {keyPath: 'uid'}); d.createObjectStore('photos', {keyPath: 'id'}); };
+    r.onsuccess = function () { IDB = r.result; res(); };
+    r.onerror = function () { rej(r.error); };
+  });
+}
+function idb(store, mode, fn) {
+  return new Promise(function (res, rej) {
+    var t = IDB.transaction(store, mode), st = t.objectStore(store), out;
+    var req = fn(st);
+    if (req) req.onsuccess = function () { out = req.result; };
+    t.oncomplete = function () { res(out); };
+    t.onerror = function () { rej(t.error); };
+    t.onabort = function () { rej(t.error || new Error('Запись не удалась')); };
+  });
+}
+function idbPut(store, obj) { return idb(store, 'readwrite', function (s) { return s.put(obj); }); }
+function idbGet(store, key) { return idb(store, 'readonly', function (s) { return s.get(key); }); }
+function idbAll(store) { return idb(store, 'readonly', function (s) { return s.getAll(); }); }
+function idbDel(store, key) { return idb(store, 'readwrite', function (s) { return s.delete(key); }); }
+function idbKeys(store) { return idb(store, 'readonly', function (s) { return s.getAllKeys(); }); }
+
+var RECS = {};      // uid -> запись
+var PH = {};        // кэш миниатюр id -> dataURL
+var S = LS.get('ob_session', null) || {step: {s: 'menu'}, stack: [], draft: null};
+var PREP = null;    // подготовленные файлы для отправки (только в памяти)
+var lastRender = 0;
+var busy = false;
+
+function saveSession() { LS.set('ob_session', S); }
+function name() { return LS.get('ob_name', ''); }
+function deviceId() { var d = LS.get('ob_device', ''); if (!d) { d = uid().slice(0, 8); LS.set('ob_device', d); } return d; }
+function floorOf(apt) { var a = APT[apt]; if (a && a.floor) return a.floor; var f = LS.get('ob_floors', {}); return f[apt] || null; }
+function learnFloor(apt, fl) { var f = LS.get('ob_floors', {}); f[apt] = fl; LS.set('ob_floors', f); }
+
+function recList() { return Object.keys(RECS).map(function (k) { return RECS[k]; }); }
+function unsent(r) { return !r.s || r.u > r.s; }
+function objKey(kind, sec, floor, apt) { return kind === 'apt' ? 'apt:' + apt : 'mop:' + sec + ':' + floor; }
+function lastRec(key) {
+  var best = null;
+  recList().forEach(function (r) { if (objKey(r.kind, r.sec, r.floor, r.apt) === key && (!best || r.saved > best.saved)) best = r; });
+  return best;
+}
+
+function inspected(st) { return st === 'surveyed' || (K.apt.inspected || []).indexOf(st) >= 0; }
+
+// ------------------------------------------------------------------ навигация
+var MAX_STACK = 150;
+function go(step) { S.stack.push(S.step); if (S.stack.length > MAX_STACK) S.stack = S.stack.slice(-MAX_STACK); S.step = step; }
+function back() {
+  if (S.stack.length) { S.step = S.stack.pop(); return; }
+  var st = S.step, d = S.draft;
+  if (d && st.s === 'summary') S.step = {s: 'block', i: blocks(d.kind).length - 1};
+  else if (d && st.s === 'block' && st.i > 0) S.step = {s: 'block', i: st.i - 1};
+  else if (d && st.s === 'block' && d.kind === 'apt') S.step = {s: 'status'};
+  else S.step = {s: 'menu'};
+}
+function head(d) {
+  if (d.kind === 'apt') return 'Кв. ' + d.apt + ', секция ' + d.sec + (d.floor ? ', этаж ' + d.floor : '');
+  return 'МОП, секция ' + d.sec + ', этаж ' + d.floor;
+}
+function newDraft(kind, sec, floor, apt) {
+  return {uid: null, kind: kind, sec: sec, floor: floor, apt: apt || null, status: kind === 'mop' ? 'surveyed' : null, track: kind === 'mop' ? 'survey' : null, blocks: {}, started: now()};
+}
+function blk(i) {
+  var d = S.draft, code = block(d.kind, i).code;
+  var a = d.blocks[code] || (d.blocks[code] = {});
+  if (!a.p) a.p = []; if (!a.rooms) a.rooms = []; if (!a.photos) a.photos = []; if (!a.units) a.units = {};
+  return a;
+}
+function clearBlock(a) { a.p = []; a.rooms = []; a.photos = []; a.units = {}; delete a.other; delete a.comment; delete a.text; }
+function resumeStep(d) {
+  if (d.kind === 'apt') {
+    if (!d.status) return {s: 'status'};
+    if (!inspected(d.status)) return {s: 'summary'};
+    if (d.track === 'self') return d.present && d.present.length ? {s: 'self_hub'} : {s: 'self_rooms'};
+  }
+  var b = blocks(d.kind);
+  for (var i = 0; i < b.length; i++) if (!(d.blocks[b[i].code] || {}).r) return {s: 'block', i: i};
+  return {s: 'summary'};
+}
+function toSummary() { var r = S.draft.ret; delete S.draft.ret; S.stack = Array.isArray(r) ? r : []; S.step = {s: 'summary'}; }
+function advance(i) {
+  var d = S.draft, n = blocks(d.kind).length;
+  if (d.track === 'self') { toHub(); return; }
+  if (d.ret !== undefined && d.ret !== null) toSummary();
+  else if (i + 1 < n) go({s: 'block', i: i + 1});
+  else go({s: 'summary'});
+}
+// ---- обход без жильцов: по помещениям
+function selfCfg() { return K.apt.self || {rooms: [], default: []}; }
+function roomBlocks(room) {
+  return blocks('apt').filter(function (b) {
+    if (b.type === 'free' || b.code === 'entry') return false;
+    if (b.rooms) return (CL.rooms[b.rooms] || []).indexOf(room) >= 0;
+    return b.room === room;
+  });
+}
+function selfAns(room, code) {
+  var d = S.draft; if (!d.rb) d.rb = {}; if (!d.rb[room]) d.rb[room] = {};
+  var a = d.rb[room][code] || (d.rb[room][code] = {});
+  if (!a.p) a.p = []; if (!a.photos) a.photos = []; if (!a.units) a.units = {};
+  return a;
+}
+function roomState(d, room) {
+  var bs = roomBlocks(room), done = 0, bad = 0;
+  bs.forEach(function (b) { var a = d.rb && d.rb[room] && d.rb[room][b.code]; if (a && a.r) { done++; if (a.r === 'problem') bad++; } });
+  return {total: bs.length, done: done, bad: bad};
+}
+function toHub() { var d = S.draft; S.stack = (d.hubStack || []).slice(); S.step = {s: 'self_hub'}; }
+function toRoom(room) { var d = S.draft; S.stack = (d.roomStack || []).slice(); S.step = {s: 'self_room', room: room}; }
+function selfLine(room, code, a) {
+  var b = block('apt', bindex('apt', code));
+  if (b.type === 'units') {
+    return (b.units || []).filter(function (u) { return a.units && a.units[u.code]; }).map(function (u) {
+      var ud = a.units[u.code];
+      return u.label + ' — ' + (ud.p || []).map(function (p) { return p === 'other' && ud.other ? low(ud.other) : low(plabel('apt', code, p, u.code)); }).join(', ');
+    }).join('; ');
+  }
+  return (a.p || []).map(function (p) { return p === 'other' && a.other ? low(a.other) : low(plabel('apt', code, p)); }).join(', ');
+}
+function selfToBlocks(rec) {
+  // ответы по помещениям -> ответы по блокам (с разбивкой по помещениям для базы)
+  blocks('apt').forEach(function (b) {
+    if (b.code === 'entry' || b.type === 'free') return;
+    var rs = (rec.present || []).filter(function (r) { return roomBlocks(r).some(function (x) { return x.code === b.code; }); });
+    if (!rs.length) { rec.blocks[b.code] = {r: b.na ? 'na' : 'skip', p: [], rooms: [], photos: [], units: {}}; return; }
+    var prob = rs.filter(function (r) { var x = rec.rb[r] && rec.rb[r][b.code]; return x && x.r === 'problem'; });
+    var answered = rs.filter(function (r) { var x = rec.rb[r] && rec.rb[r][b.code]; return x && x.r; });
+    if (!prob.length) { rec.blocks[b.code] = {r: answered.length ? 'ok' : 'skip', p: [], rooms: [], photos: [], units: {}}; return; }
+    var a = {r: 'problem', p: [], rooms: prob.slice(), photos: [], units: {}, by_room: {}}, comments = [], others = [];
+    prob.forEach(function (r) {
+      var x = clone(rec.rb[r][b.code]);
+      a.by_room[r] = {p: x.p || [], other: x.other, comment: x.comment, photos: x.photos || [], units: x.units || {}};
+      (x.p || []).forEach(function (p) { if (a.p.indexOf(p) < 0) a.p.push(p); });
+      if (x.other && (x.p || []).indexOf('other') >= 0) others.push(x.other);
+      if (x.comment) comments.push(r + ': ' + x.comment);
+      a.photos = a.photos.concat(x.photos || []);
+      Object.keys(x.units || {}).forEach(function (u) { a.units[u] = x.units[u]; });
+    });
+    if (others.length) a.other = others.join('; ');
+    if (comments.length) a.comment = comments.join('; ');
+    rec.blocks[b.code] = a;
+  });
+}
+
+function selectedUnits(kind, i, a) { return (block(kind, i).units || []).map(function (u) { return u.code; }).filter(function (c) { return a.units && a.units[c]; }); }
+
+function openObject(kind, sec, floor, apt) {
+  var d = S.draft;
+  if (d && !d.uid && d.kind === kind && d.sec === sec && (kind === 'apt' ? d.apt === apt : d.floor === floor)) {
+    d.floor = floor; go(kind === 'apt' ? {s: 'status'} : {s: 'block', i: 0}); return;
+  }
+  var prev = lastRec(objKey(kind, sec, floor, apt));
+  if (prev) { go({s: 'existing', uid: prev.uid, kind: kind, sec: sec, floor: floor, apt: apt}); return; }
+  S.draft = newDraft(kind, sec, floor, apt);
+  go(kind === 'apt' ? {s: 'status'} : {s: 'block', i: 0});
+}
+function chooseApt(sec, apt, confirmed) {
+  if (!APT[apt]) return '!Квартиры ' + apt + ' нет в списке';
+  if (!confirmed) { go({s: 'apt_confirm', sec: sec, apt: apt}); return; }
+  var fl = floorOf(apt);
+  if (!fl) { go({s: 'apt_floor', sec: sec, apt: apt}); return; }
+  openObject('apt', sec, fl, apt);
+}
+function reopen(u) {
+  var r = RECS[u];
+  if (!r) return '!Запись не найдена';
+  if (S.draft) return '!Сначала завершите или удалите текущую запись (' + head(S.draft) + ')';
+  var d = clone(r); delete d.u; delete d.s; delete d.saved; delete d.updated; delete d.inspector;
+  S.draft = d; S.stack = [{s: 'menu'}]; S.step = {s: 'summary'};
+}
+
+// ------------------------------------------------------------------ сохранение записи
+function checkDraft(d) {
+  if (d.kind === 'apt' && !d.status) return 'Не выбран статус визита';
+  if (d.kind === 'apt' && d.track === 'self' && inspected(d.status)) {
+    var ms = [];
+    if (!(d.blocks.entry || {}).r) ms.push('Входная дверь');
+    (d.present || []).forEach(function (r) { var st = roomState(d, r); if (st.done < st.total) ms.push(r); });
+    if (!(d.present || []).length) ms.push('не выбраны помещения');
+    return ms.length ? 'Не проверено: ' + ms.join(', ') : null;
+  }
+  if (inspected(d.status)) {
+    var miss = blocks(d.kind).filter(function (b) { return !(d.blocks[b.code] || {}).r; }).map(function (b) { return b.short; });
+    if (miss.length) return 'Не заполнено: ' + miss.join(', ');
+  }
+  return null;
+}
+function submit() {
+  var d = S.draft, err = checkDraft(d);
+  if (err) return '!' + err;
+  var old = d.uid ? RECS[d.uid] : null;
+  var rec = clone(d);
+  delete rec.ret;
+  if (rec.kind === 'apt' && !inspected(rec.status)) { rec.blocks = {}; delete rec.rb; delete rec.present; rec.track = null; }
+  else if (rec.track === 'self') {
+    selfToBlocks(rec);
+    var fb = blocks('apt').filter(function (b) { return b.type === 'free'; })[0];
+    if (fb && !(rec.blocks[fb.code] || {}).r) rec.blocks[fb.code] = {r: 'skip', p: [], rooms: [], photos: [], units: {}};
+  } else {
+    delete rec.rb; delete rec.present;
+    Object.keys(rec.blocks).forEach(function (k) { delete rec.blocks[k].by_room; });
+  }
+  delete rec.hubStack; delete rec.roomStack;
+  Object.keys(rec.blocks).forEach(function (k) {
+    var a = rec.blocks[k];
+    if (a.p && a.p.indexOf('other') < 0) delete a.other;
+    Object.keys(a.units || {}).forEach(function (u) { var ud = a.units[u]; if (ud.p.indexOf('other') < 0) delete ud.other; });
+  });
+  rec.uid = d.uid || uid();
+  rec.saved = old ? old.saved : now();
+  rec.updated = now();
+  rec.u = Date.now();
+  rec.s = old ? old.s : 0;
+  rec.inspector = name();
+  RECS[rec.uid] = rec;
+  busy = true;
+  idbPut('records', rec).then(function () { busy = false; render(); }, function (e) { busy = false; alert('Ошибка сохранения: ' + e.message); });
+  S.draft = null; S.stack = [];
+  S.step = {s: 'saved', uid: rec.uid};
+  PREP = null;
+}
+function countIssues(r) {
+  var n = 0;
+  Object.keys(r.blocks || {}).forEach(function (k) {
+    var a = r.blocks[k]; if (a.r !== 'problem') return;
+    if (a.units && Object.keys(a.units).length) Object.keys(a.units).forEach(function (u) { n += (a.units[u].p || []).length; });
+    else n += (a.p || []).length;
+  });
+  return n;
+}
+
+// ------------------------------------------------------------------ действия
+function act(data) {
+  var st = S.step, nm = st.s, d = S.draft, kind = d ? d.kind : null;
+  if (data === 'bk') { back(); return; }
+  if (data === 'm:menu') { S.step = {s: 'menu'}; S.stack = []; return; }
+
+  if (nm === 'menu') {
+    if (data === 'm:apt' || data === 'm:mop') {
+      if (d) return '!Есть незавершённая запись (' + head(d) + '). Продолжите или удалите её.';
+      go({s: 'section', mode: data.slice(2)});
+    } else if (data === 'm:recs') go({s: 'records'});
+    else if (data === 'm:send') { PREP = null; go({s: 'send'}); }
+    else if (data === 'm:set') go({s: 'settings'});
+    else if (data === 'dr:cont' && d) { S.step = resumeStep(d); S.stack = []; }
+    else if (data === 'dr:del' && d) go({s: 'confirm_del'});
+    return;
+  }
+  if (nm === 'section' && data.indexOf('sec:') === 0) {
+    var sec = +data.slice(4);
+    go(st.mode === 'apt' ? {s: 'apt_input', sec: sec} : {s: 'floor', sec: sec});
+    return;
+  }
+  if (nm === 'apt_input') {
+    if (data.indexOf('nx:') === 0) return chooseApt(st.sec, +data.slice(3), true);
+    if (data === 'ai:go') {
+      var digits = String(st.val || '').replace(/\D/g, '');
+      if (!digits) { st.err = 'Нужен номер квартиры цифрами'; return; }
+      var n = +digits, row = APT[n];
+      if (!row) { st.err = 'Квартиры ' + n + ' нет в списке'; return; }
+      if (row.sec !== st.sec) { var rg = secRange(st.sec); st.err = 'Кв. ' + n + ' в секции ' + row.sec + ', а не в ' + st.sec + ' (здесь кв. ' + rg[0] + '–' + rg[1] + ')'; return; }
+      delete st.err; st.val = '';
+      return chooseApt(st.sec, n, false);
+    }
+    return;
+  }
+  if (nm === 'apt_confirm') {
+    if (data === 'ca:y') return chooseApt(st.sec, st.apt, true);
+    if (data === 'ca:n') back();
+    return;
+  }
+  if (nm === 'apt_floor' && data.indexOf('af:') === 0) { var fl = +data.slice(3); learnFloor(st.apt, fl); openObject('apt', st.sec, fl, st.apt); return; }
+  if (nm === 'floor' && data.indexOf('fl:') === 0) { openObject('mop', st.sec, +data.slice(3), null); return; }
+  if (nm === 'existing') {
+    if (data === 'ex:new') { S.draft = newDraft(st.kind, st.sec, st.floor, st.apt); go(st.kind === 'apt' ? {s: 'status'} : {s: 'block', i: 0}); }
+    else if (data === 'ex:edit') { if (S.draft && !S.draft.uid) S.draft = null; return reopenFrom(st.uid); }
+    return;
+  }
+  if (nm === 'status' && data.indexOf('st:') === 0) {
+    d.status = data.slice(3);
+    var hasRet = d.ret !== undefined && d.ret !== null;
+    if (d.status === 'self') {
+      d.track = 'self';
+      if (hasRet && d.present && d.present.length && d.rb) { toSummary(); return; }
+      delete d.ret;
+      if (!d.present) d.present = (selfCfg().default || []).slice();
+      go({s: 'self_rooms'}); return;
+    }
+    if (inspected(d.status)) {
+      d.track = 'survey';
+      Object.keys(d.blocks).forEach(function (k) { delete d.blocks[k].by_room; });
+      var any = blocks('apt').some(function (b) { return b.code !== 'entry' && (d.blocks[b.code] || {}).r; });
+      if (hasRet && any) { toSummary(); return; }
+      delete d.ret; go({s: 'block', i: 0}); return;
+    }
+    if (hasRet) { toSummary(); return; }
+    return submit();
+  }
+  if (nm === 'self_rooms') {
+    var cfg = selfCfg();
+    if (data.indexOf('sr:t:') === 0) {
+      var rn = cfg.rooms[+data.slice(5)], pos0 = d.present.indexOf(rn);
+      if (pos0 >= 0) d.present.splice(pos0, 1); else d.present.push(rn);
+      d.present.sort(function (x, y) { return cfg.rooms.indexOf(x) - cfg.rooms.indexOf(y); });
+    } else if (data === 'sr:nx') {
+      if (!d.present.length) return '!Отметьте хотя бы одно помещение';
+      if (d.ret !== undefined && d.ret !== null) { toSummary(); return; }
+      go({s: 'self_hub'}); d.hubStack = S.stack.slice();
+    }
+    return;
+  }
+  if (nm === 'self_hub') {
+    if (!d.hubStack) d.hubStack = S.stack.slice();
+    if (data === 'sh:entry') { go({s: 'block', i: bindex('apt', 'entry')}); return; }
+    if (data === 'sh:free') { var fi = -1; blocks('apt').forEach(function (b, k) { if (b.type === 'free') fi = k; }); go({s: 'block', i: fi}); return; }
+    if (data === 'sh:rooms') { go({s: 'self_rooms'}); return; }
+    if (data.indexOf('sh:r:') === 0) { var room = d.present[+data.slice(5)]; go({s: 'self_room', room: room}); d.roomStack = S.stack.slice(); return; }
+    if (data === 'sh:done') { var e = checkDraft(d); if (e) return '!' + e; go({s: 'summary'}); return; }
+    return;
+  }
+  if (nm === 'self_room') {
+    var R0 = st.room;
+    if (!d.roomStack) d.roomStack = S.stack.slice();
+    if (data.indexOf('so:ok:') === 0) { var a0 = selfAns(R0, data.slice(6)); a0.r = 'ok'; a0.p = []; a0.units = {}; a0.photos = []; delete a0.other; delete a0.comment; return; }
+    if (data.indexOf('so:pb:') === 0) {
+      var c0 = data.slice(6), b0 = block('apt', bindex('apt', c0)), a1 = selfAns(R0, c0);
+      a1.r = 'problem';
+      if (b0.type === 'units') go({s: 'self_units', room: R0, code: c0});
+      else go({s: 'self_probs', room: R0, code: c0, u: null});
+      return;
+    }
+    if (data === 'so:rest') {
+      roomBlocks(R0).forEach(function (b) { var x = selfAns(R0, b.code); if (!x.r) x.r = 'ok'; });
+      toHub(); return;
+    }
+    if (data === 'so:done') { toHub(); return; }
+    return;
+  }
+  if (nm === 'self_units') {
+    var a2u = selfAns(st.room, st.code);
+    if (data.indexOf('u:') === 0) { var uc = data.slice(2); if (a2u.units[uc]) delete a2u.units[uc]; else a2u.units[uc] = {p: []}; return; }
+    if (data === 'un:nx') {
+      var sl = (block('apt', bindex('apt', st.code)).units || []).map(function (u) { return u.code; }).filter(function (c) { return a2u.units[c]; });
+      if (!sl.length) return '!Отметьте технику с проблемами';
+      go({s: 'self_probs', room: st.room, code: st.code, u: sl[0]}); return;
+    }
+    return;
+  }
+  if (nm === 'self_probs') {
+    var a3s = selfAns(st.room, st.code), tg3 = st.u ? (a3s.units[st.u] || (a3s.units[st.u] = {p: []})) : a3s;
+    if (data === 'p:nx') {
+      if (tg3.p.indexOf('other') >= 0 && !(tg3.other || '').trim()) return '!Впишите, что не так, или снимите отметку «Другое»';
+      if (!tg3.p.length) return '!Отметьте хотя бы одну проблему или нажмите «Назад»';
+      if (st.u) {
+        var sl2 = (block('apt', bindex('apt', st.code)).units || []).map(function (u) { return u.code; }).filter(function (c) { return a3s.units[c]; });
+        var k3 = sl2.indexOf(st.u);
+        if (k3 >= 0 && k3 + 1 < sl2.length) { go({s: 'self_probs', room: st.room, code: st.code, u: sl2[k3 + 1]}); return; }
+      }
+      go({s: 'self_comment', room: st.room, code: st.code}); return;
+    }
+    if (data.indexOf('p:') === 0) { var pc3 = data.slice(2), ps3 = tg3.p.indexOf(pc3); if (ps3 >= 0) tg3.p.splice(ps3, 1); else tg3.p.push(pc3); }
+    return;
+  }
+  if (nm === 'self_comment' && data === 'c:done') { toRoom(st.room); return; }
+  if (nm === 'block') {
+    var i = st.i, b = block(kind, i), a = blk(i), bt = b.type;
+    if (data === 'b:ok' || data === 'b:sk' || data === 'b:na') { clearBlock(a); a.r = {'b:ok': 'ok', 'b:sk': 'skip', 'b:na': 'na'}[data]; advance(i); }
+    else if (data === 'b:pb') { a.r = 'problem'; go({s: 'probs', i: i, u: null}); }
+    else if (bt === 'units' && data === 'un:nx') {
+      var sel = selectedUnits(kind, i, a);
+      if (!sel.length) return '!Отметьте технику с проблемами или нажмите «Вся техника в порядке»';
+      a.r = 'problem'; go({s: 'probs', i: i, u: sel[0]});
+    } else if (bt === 'units' && data.indexOf('u:') === 0) {
+      var c = data.slice(2);
+      if (a.units[c]) delete a.units[c]; else a.units[c] = {p: []};
+    } else if (bt === 'free' && data === 'f:done') {
+      a.r = (a.text || a.photos.length) ? 'text' : 'skip'; advance(i);
+    }
+    return;
+  }
+  if (nm === 'probs') {
+    var i2 = st.i, unit = st.u, a2 = blk(i2);
+    var tg = unit ? (a2.units[unit] || (a2.units[unit] = {p: []})) : a2;
+    if (data === 'p:nx') {
+      if (tg.p.indexOf('other') >= 0 && !(tg.other || '').trim()) return '!Впишите, что не так, или снимите отметку «Другое»';
+      if (!tg.p.length) return '!Отметьте хотя бы одну проблему или нажмите «Назад»';
+      if (unit) {
+        var sel2 = selectedUnits(kind, i2, a2), k = sel2.indexOf(unit);
+        if (k >= 0 && k + 1 < sel2.length) go({s: 'probs', i: i2, u: sel2[k + 1]});
+        else go({s: 'comment', i: i2});
+      } else if (rooms(kind, i2).length) go({s: 'rooms', i: i2});
+      else go({s: 'comment', i: i2});
+    } else if (data.indexOf('p:') === 0) {
+      var pc = data.slice(2), pos = tg.p.indexOf(pc);
+      if (pos >= 0) tg.p.splice(pos, 1); else tg.p.push(pc);
+    }
+    return;
+  }
+  if (nm === 'rooms') {
+    var a3 = blk(st.i), rs = rooms(kind, st.i), W = whole(kind);
+    if (data.indexOf('r:') === 0 && /^\d+$/.test(data.slice(2))) {
+      var r = rs[+data.slice(2)];
+      a3.rooms = a3.rooms.filter(function (x) { return x !== W; });
+      var rp = a3.rooms.indexOf(r);
+      if (rp >= 0) a3.rooms.splice(rp, 1); else a3.rooms.push(r);
+      a3.rooms.sort(function (x, y) { return rs.indexOf(x) - rs.indexOf(y); });
+    } else if (data === 'r:all') a3.rooms = a3.rooms.indexOf(W) >= 0 ? [] : [W];
+    else if (data === 'r:nx') go({s: 'comment', i: st.i});
+    return;
+  }
+  if (nm === 'comment' && data === 'c:done') { advance(st.i); return; }
+  if (nm === 'summary') {
+    if (data.indexOf('sm:') === 0 && /^\d+$/.test(data.slice(3))) { d.ret = S.stack.slice(); go({s: 'block', i: +data.slice(3)}); }
+    else if (data === 'sm:st') { d.ret = S.stack.slice(); go({s: 'status'}); }
+    else if (data === 'sm:rooms') { d.ret = S.stack.slice(); go({s: 'self_rooms'}); }
+    else if (data === 'sm:hub') { go({s: 'self_hub'}); d.hubStack = S.stack.slice(); }
+    else if (data.indexOf('sm:r:') === 0) { var hs = S.stack.slice(); go({s: 'self_hub'}); d.hubStack = S.stack.slice(); go({s: 'self_room', room: data.slice(5)}); d.roomStack = S.stack.slice(); }
+    else if (data === 'sm:save') return submit();
+    else if (data === 'sm:del') go({s: 'confirm_del'});
+    return;
+  }
+  if (nm === 'confirm_del' && data === 'dl:y') {
+    var msg = d && d.uid ? 'Изменения отменены' : 'Черновик удалён';
+    S.draft = null; S.step = {s: 'menu'}; S.stack = []; gcPhotos();
+    return msg;
+  }
+  if (nm === 'saved') {
+    var rec = RECS[st.uid];
+    if (data.indexOf('nx:') === 0) return chooseApt(rec.sec, +data.slice(3), true);
+    if (data === 'na:other') { S.stack = [{s: 'menu'}]; S.step = rec.kind === 'apt' ? {s: 'apt_input', sec: rec.sec} : {s: 'floor', sec: rec.sec}; return; }
+    if (data.indexOf('nf:') === 0) { openObject('mop', rec.sec, +data.slice(3), null); return; }
+    if (data.indexOf('op:') === 0) return reopen(data.slice(3));
+    return;
+  }
+  if (nm === 'records' && data.indexOf('op:') === 0) return reopen(data.slice(3));
+  if (nm === 'send') return sendAct(data);
+  if (nm === 'settings') {
+    if (data === 'set:ok') {
+      if (!name().trim()) return '!Укажите имя';
+      S.step = {s: 'menu'}; S.stack = []; return;
+    }
+    if (data === 'set:clean') { go({s: 'confirm_clean'}); return; }
+    return;
+  }
+  if (nm === 'confirm_clean' && data === 'cl:y') {
+    var del = recList().filter(function (r) { return !unsent(r); });
+    del.forEach(function (r) { delete RECS[r.uid]; idbDel('records', r.uid); });
+    S.step = {s: 'menu'}; S.stack = [];
+    setTimeout(gcPhotos, 500);
+    return 'Удалено отправленных записей: ' + del.length;
+  }
+}
+function reopenFrom(u) { return reopen(u); }
+function secRange(sec) { var xs = APTS.filter(function (a) { return a[1] === sec; }).map(function (a) { return a[0]; }); return [Math.min.apply(null, xs), Math.max.apply(null, xs), xs.length]; }
+
+// ------------------------------------------------------------------ фото
+function compress(file) {
+  return new Promise(function (res, rej) {
+    var url = URL.createObjectURL(file), img = new Image();
+    img.onload = function () {
+      var m = 1280, w = img.naturalWidth, h = img.naturalHeight, k = Math.min(1, m / Math.max(w, h));
+      w = Math.round(w * k); h = Math.round(h * k);
+      var c = document.createElement('canvas'); c.width = w; c.height = h;
+      c.getContext('2d').drawImage(img, 0, 0, w, h);
+      URL.revokeObjectURL(url);
+      res(c.toDataURL('image/jpeg', 0.72));
+    };
+    img.onerror = function () { URL.revokeObjectURL(url); rej(new Error('не удалось прочитать фото')); };
+    img.src = url;
+  });
+}
+function curTarget() {
+  var st = S.step;
+  if (st.s === 'self_comment') return selfAns(st.room, st.code);
+  return blk(st.i);
+}
+function addPhotos(files, target) {
+  var arr = Array.prototype.slice.call(files || []);
+  if (!arr.length) return;
+  busy = true; render();
+  var chain = Promise.resolve();
+  arr.forEach(function (f) {
+    chain = chain.then(function () { return compress(f); }).then(function (data) {
+      var id = 'ph-' + uid().slice(0, 13);
+      PH[id] = data;
+      return idbPut('photos', {id: id, data: data, at: now()}).then(function () { target.photos.push(id); saveSession(); });
+    });
+  });
+  chain.then(function () { busy = false; render(); }, function (e) { busy = false; render(); alert('Фото не сохранено: ' + e.message); });
+}
+function fillThumbs() {
+  var imgs = document.querySelectorAll('img[data-ph]');
+  Array.prototype.forEach.call(imgs, function (im) {
+    var id = im.getAttribute('data-ph');
+    if (PH[id]) { im.src = PH[id]; return; }
+    idbGet('photos', id).then(function (p) { if (p) { PH[id] = p.data; im.src = p.data; } });
+  });
+}
+function gcPhotos() {
+  var used = {};
+  function mark(blocksObj) { Object.keys(blocksObj || {}).forEach(function (k) { (blocksObj[k].photos || []).forEach(function (id) { used[id] = 1; }); }); }
+  recList().forEach(function (r) { mark(r.blocks); });
+  recList().forEach(function (r) { Object.keys(r.rb || {}).forEach(function (room) { mark(r.rb[room]); }); });
+  if (S.draft) { mark(S.draft.blocks); Object.keys(S.draft.rb || {}).forEach(function (room) { mark(S.draft.rb[room]); }); }
+  idbKeys('photos').then(function (keys) { keys.forEach(function (k) { if (!used[k]) { idbDel('photos', k); delete PH[k]; } }); });
+}
+
+// ------------------------------------------------------------------ отправка
+function sendAct(data) {
+  var st = S.step;
+  if (data === 'sd:all') { st.all = !st.all; PREP = null; return; }
+  if (data === 'sd:prep') { prepare(st.all); return; }
+  if (data.indexOf('sd:share:') === 0) { shareOrDownload(+data.slice(9), false); return; }
+  if (data.indexOf('sd:dl:') === 0) { shareOrDownload(+data.slice(6), true); return; }
+  if (data.indexOf('sd:done:') === 0) { markSent(+data.slice(8)); return; }
+}
+function toSend(all) { return recList().filter(function (r) { return all || unsent(r); }).sort(function (a, b) { return a.saved < b.saved ? -1 : 1; }); }
+function prepare(all) {
+  var recs = toSend(all);
+  if (!recs.length) { PREP = null; return; }
+  busy = true; render();
+  var parts = [], cur = null;
+  function newPart() { cur = {records: [], photos: {}, size: 2000}; parts.push(cur); }
+  newPart();
+  var chain = Promise.resolve();
+  recs.forEach(function (r) {
+    chain = chain.then(function () {
+      var ids = [];
+      Object.keys(r.blocks || {}).forEach(function (k) { (r.blocks[k].photos || []).forEach(function (id) { ids.push(id); }); });
+      return Promise.all(ids.map(function (id) { return PH[id] ? {id: id, data: PH[id]} : idbGet('photos', id); })).then(function (ps) {
+        var recCopy = clone(r); delete recCopy.u; delete recCopy.s;
+        var size = JSON.stringify(recCopy).length, phs = {};
+        ps.forEach(function (p) { if (p) { phs[p.id] = p.data; size += p.data.length + 40; } });
+        if (cur.records.length && cur.size + size > PART_LIMIT) newPart();
+        cur.records.push(recCopy); cur.size += size;
+        Object.keys(phs).forEach(function (k) { cur.photos[k] = phs[k]; });
+      });
+    });
+  });
+  chain.then(function () {
+    var stamp = now().replace(/[: ]/g, '-').slice(0, 16), nm = (name() || 'obhodchik').replace(/[^\wА-Яа-яЁё]+/g, '_');
+    PREP = parts.map(function (p, k) {
+      var body = JSON.stringify({format: FORMAT, v: 1, app: VERSION, device: deviceId(), inspector: name(), created: now(),
+        part: k + 1, parts: parts.length, records: p.records, photos: p.photos});
+      var fname = 'obhod_' + nm + '_' + stamp + (parts.length > 1 ? '_' + (k + 1) + 'iz' + parts.length : '') + '.txt';
+      var file;
+      try { file = new File([body], fname, {type: 'text/plain'}); } catch (e) { file = new Blob([body], {type: 'text/plain'}); file.name = fname; }
+      return {file: file, name: fname, uids: p.records.map(function (r) { return r.uid; }), stamp: p.records.map(function (r) { return RECS[r.uid].u; }),
+        n: p.records.length, photos: Object.keys(p.photos).length, size: body.length, done: false, shared: false};
+    });
+    busy = false; render();
+  }, function (e) { busy = false; render(); alert('Не удалось подготовить файл: ' + e.message); });
+}
+function canShareFiles(f) { try { return !!(navigator.canShare && navigator.canShare({files: [f]})); } catch (e) { return false; } }
+function shareOrDownload(k, forceDl) {
+  var p = PREP && PREP[k]; if (!p) return;
+  if (!forceDl && canShareFiles(p.file)) {
+    navigator.share({files: [p.file], title: p.name}).then(function () { p.shared = true; render(); },
+      function (e) { if (e && e.name !== 'AbortError') alert('Не получилось поделиться: ' + e.message + '. Попробуйте «Сохранить файл».'); });
+    return;
+  }
+  var a = document.createElement('a'); a.href = URL.createObjectURL(p.file); a.download = p.name;
+  document.body.appendChild(a); a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 4000);
+  p.shared = true;
+}
+function markSent(k) {
+  var p = PREP && PREP[k]; if (!p) return;
+  var t = Date.now();
+  p.uids.forEach(function (u, j) { var r = RECS[u]; if (r && r.u === p.stamp[j]) { r.s = t; idbPut('records', r); } });
+  p.done = true;
+}
+
+// ------------------------------------------------------------------ экраны
+function B(label, data, cls, extra) { return '<button class="btn ' + (cls || '') + '" data-a="' + esc(data) + '"' + (extra || '') + '>' + label + '</button>'; }
+function T(label, data, on, tag) { return '<button class="btn' + (on ? ' on' : '') + '" data-a="' + esc(data) + '"><span class="box">' + (on ? '✓' : '') + '</span><span>' + esc(label) + '</span>' + (tag ? '<span class="tag">' + tag + '</span>' : '') + '</button>'; }
+function BACK() { return B('⬅️ Назад', 'bk', 'c'); }
+
+function curAnswer(kind, i, a) {
+  if (!a.r) return '';
+  if (a.r === 'ok') return '<div class="note okn">Сейчас: ✅ в порядке</div>';
+  if (a.r === 'skip') return '<div class="note">Сейчас: ⏭ пропущено</div>';
+  if (a.r === 'na') return '<div class="note">Сейчас: ➖ ' + esc(low(block(kind, i).na || 'не применимо')) + '</div>';
+  var l = blockLine(kind, i, a);
+  return l ? '<div class="note warn">Сейчас: ❌ ' + esc(l) + '</div>' : '';
+}
+function blockLine(kind, i, a) {
+  var b = block(kind, i);
+  if (b.type === 'units') {
+    return (b.units || []).filter(function (u) { return a.units && a.units[u.code]; }).map(function (u) {
+      var ud = a.units[u.code];
+      var ps = (ud.p || []).map(function (p) { return p === 'other' && ud.other ? low(ud.other) : low(plabel(kind, b.code, p, u.code)); });
+      return u.label + (ps.length ? ' — ' + ps.join(', ') : '');
+    }).join('; ');
+  }
+  var ps = (a.p || []).map(function (p) { return p === 'other' && a.other ? low(a.other) : low(plabel(kind, b.code, p)); });
+  var line = ps.join(', ');
+  if (a.rooms && a.rooms.length) line += ' (' + a.rooms.join(', ') + ')';
+  return line;
+}
+function photoBlock(target, key) {
+  var h = '<div class="thumbs">' + (target.photos || []).map(function (id, k) { return '<img data-ph="' + esc(id) + '" data-del="' + k + '" alt="">'; }).join('') + '</div>';
+  h += '<div class="row2"><label class="btn small c">📷 Снять<input type="file" accept="image/*" capture="environment" data-photo="' + key + '" hidden></label>' +
+       '<label class="btn small c">🖼 Из галереи<input type="file" accept="image/*" multiple data-photo="' + key + '" hidden></label></div>';
+  if ((target.photos || []).length) h += '<div class="small">Нажмите на фото, чтобы удалить его.</div>';
+  return h;
+}
+
+var R = {};
+R.menu = function () {
+  var d = S.draft, h = '<h1>Обход</h1><div class="sub">Обходчик: ' + esc(name()) + '</div>', bar = '';
+  if (!isStandalone()) h += '<div class="note warn">Чтобы анкета открывалась без интернета, добавьте её на экран «Домой»: ' + installHint() + '</div>';
+  if (d) h += '<div class="note">Незавершённая запись: <b>' + esc(head(d)) + '</b></div>' + B('▶️ Продолжить: ' + esc(head(d)), 'dr:cont', 'ok') + B('🗑 Удалить черновик', 'dr:del', 'ghost');
+  h += '<div class="grid g2">' + B('🏠 Квартира', 'm:apt', 'c') + B('🏢 МОП', 'm:mop', 'c') + '</div>';
+  var all = recList(), un = all.filter(unsent).length;
+  h += B('📋 Записи на телефоне: ' + all.length, 'm:recs');
+  h += B('📤 Сдать записи' + (un ? ' <span class="tag">не сдано: ' + un + '</span>' : ''), 'm:send', un ? 'on' : '');
+  h += B('⚙️ Настройки', 'm:set', 'ghost');
+  return [h, bar];
+};
+R.section = function (st) {
+  var h = '<h1>' + (st.mode === 'apt' ? 'Квартира' : 'МОП') + ': секция</h1><div class="grid">' + SECTIONS.map(function (s) { return B(String(s), 'sec:' + s); }).join('') + '</div>';
+  return [h, BACK()];
+};
+R.apt_input = function (st) {
+  var rg = secRange(st.sec);
+  var h = '<div class="head">Секция ' + st.sec + ' (кв. ' + rg[0] + '–' + rg[1] + ', ' + rg[2] + ' кв.)</div><h1>Номер квартиры</h1>';
+  if (st.err) h += '<div class="err">❗ ' + esc(st.err) + '</div>';
+  h += '<input class="inp big" id="aptnum" inputmode="numeric" pattern="[0-9]*" autocomplete="off" data-bind="aptnum" value="' + esc(st.val || '') + '" placeholder="№">';
+  h += B('Далее ➡️', 'ai:go', 'ok');
+  var rows = APTS.filter(function (a) { return a[1] === st.sec; }).map(function (a) {
+    var r = lastRec('apt:' + a[0]); return {apt: a[0], st: r ? r.status : null};
+  }).filter(function (x) { return !x.st || x.st === 'not_opened'; });
+  h += '<h2>Или выберите: ещё нет записи на этом телефоне (' + rows.length + ')</h2><div class="sub">🔁 — в прошлый раз не открыли</div>';
+  h += '<div class="grid g5">' + rows.map(function (x) { return B((x.st ? '🔁' : '') + x.apt, 'nx:' + x.apt); }).join('') + '</div>';
+  return [h, BACK()];
+};
+R.apt_confirm = function (st) {
+  var fl = floorOf(st.apt);
+  return ['<h1>Кв. ' + st.apt + '</h1><div class="sub">Секция ' + st.sec + (fl ? ', этаж ' + fl : '') + '. Верно?</div>' + B('✅ Да', 'ca:y', 'ok') + B('✏️ Другой номер', 'ca:n', 'c'), BACK()];
+};
+R.apt_floor = function (st) {
+  var h = '<h1>Кв. ' + st.apt + ': какой этаж?</h1><div class="sub">В списке этаж не указан. Запомню для следующих записей.</div><div class="grid g5">';
+  for (var f = 2; f <= 11; f++) h += B(String(f), 'af:' + f);
+  return [h + '</div>', BACK()];
+};
+R.floor = function (st) {
+  var h = '<h1>МОП, секция ' + st.sec + ': этаж</h1><div class="sub">✔ — уже есть запись на этом телефоне</div>';
+  var fls = K.mop.floors;
+  h += B((lastRec('mop:' + st.sec + ':' + fls[0]) ? '✔ ' : '') + fls[0] + ' (лифтовой холл)', 'fl:' + fls[0], 'c');
+  h += '<div class="grid g5">' + fls.slice(1).map(function (f) { return B((lastRec('mop:' + st.sec + ':' + f) ? '✔ ' : '') + f, 'fl:' + f); }).join('') + '</div>';
+  return [h, BACK()];
+};
+R.existing = function (st) {
+  var r = RECS[st.uid];
+  var what = st.kind === 'apt' ? 'кв. ' + st.apt : 'этажу ' + st.floor;
+  var stt = st.kind === 'apt' ? low(labelOf(K.apt.statuses, r.status)) : 'осмотрено';
+  return ['<h1>По ' + what + ' уже есть запись</h1><div class="sub">' + dm(r.saved) + ', ' + esc(stt) + ', замечаний ' + countIssues(r) + '</div>' +
+    B('🆕 Новый визит', 'ex:new', 'ok') + B('✏️ Исправить ту запись', 'ex:edit', 'c'), BACK()];
+};
+R.status = function () {
+  var d = S.draft;
+  return ['<div class="head">' + esc(head(d)) + '</div><h1>Что делаем?</h1>' +
+    K.apt.statuses.map(function (x) { return B((d.status === x.code ? '● ' : '') + esc(x.button || x.label), 'st:' + x.code, inspected(x.code) ? 'ok' : 'c'); }).join(''), BACK()];
+};
+R.block = function (st) {
+  var d = S.draft, kind = d.kind, i = st.i, b = block(kind, i), n = blocks(kind).length, a = blk(i);
+  var selfT = d.track === 'self', title = b.title, q = b.question;
+  if (selfT && b.type === 'free') { title = selfCfg().free_title || title; q = selfCfg().free_question || q; }
+  var h = '<div class="head">' + esc(head(d)) + (selfT ? ', обход без жильцов' : ', блок ' + (i + 1) + ' из ' + n) + '</div><h1>' + esc(title) + '</h1><div class="sub">' + esc(q) + '</div>';
+  if (b.type === 'units') {
+    var sel = a.units || {};
+    if (a.r === 'problem' && Object.keys(sel).some(function (u) { return (sel[u].p || []).length; })) h += curAnswer(kind, i, a);
+    h += (b.units || []).map(function (u) { return T(u.label, 'u:' + u.code, !!sel[u.code]); }).join('');
+    h += B('✅ Вся техника в порядке', 'b:ok', 'ok');
+    h += B('⏭ Пропустить', 'b:sk', 'ghost');
+    var bar = BACK() + (Object.keys(sel).length ? B('Далее ➡️', 'un:nx', 'ok') : '');
+    return [h, bar];
+  }
+  if (b.type === 'free') {
+    h += '<textarea class="inp" data-bind="free" placeholder="' + (selfT ? 'Комментарий' : 'Что говорит жилец') + '">' + esc(a.text || '') + '</textarea>';
+    h += photoBlock(a, 'free');
+    return [h, BACK() + B('Готово ➡️', 'f:done', 'ok')];
+  }
+  h += curAnswer(kind, i, a);
+  h += B('✅ Всё в порядке', 'b:ok', 'ok') + B('❌ Есть проблемы', 'b:pb', 'bad');
+  if (b.na) h += B('➖ ' + esc(b.na), 'b:na', 'c');
+  h += B('⏭ Пропустить', 'b:sk', 'ghost');
+  return [h, BACK()];
+};
+R.probs = function (st) {
+  var d = S.draft, kind = d.kind, i = st.i, unit = st.u, b = block(kind, i), a = blk(i);
+  var tg = unit ? (a.units[unit] || (a.units[unit] = {p: []})) : a;
+  var title = b.title + (unit ? ': ' + ulabel(kind, b.code, unit) : '');
+  var h = '<div class="head">' + esc(head(d)) + '</div><h1>' + esc(title) + '</h1><div class="sub">Что не так? Можно отметить несколько.</div>';
+  h += problems(kind, i, unit).map(function (p) { return T(p.label, 'p:' + p.code, tg.p.indexOf(p.code) >= 0, p.urgent ? 'срочно' : ''); }).join('');
+  var oth = tg.p.indexOf('other') >= 0;
+  h += T('Другое (вписать)', 'p:other', oth);
+  if (oth) h += '<input class="inp" data-bind="other" placeholder="Что не так" value="' + esc(tg.other || '') + '">';
+  return [h, BACK() + B('Далее ➡️', 'p:nx', 'ok')];
+};
+R.rooms = function (st) {
+  var d = S.draft, kind = d.kind, a = blk(st.i), rs = rooms(kind, st.i), W = whole(kind);
+  var h = '<div class="head">' + esc(head(d)) + '</div><h1>' + esc(block(kind, st.i).title) + ': где?</h1><div class="sub">Можно несколько или пропустить.</div>';
+  h += '<div class="grid g2">' + rs.map(function (r, k) { return T(r, 'r:' + k, a.rooms.indexOf(r) >= 0); }).join('') + '</div>';
+  h += T(W, 'r:all', a.rooms.indexOf(W) >= 0);
+  return [h, BACK() + B('Далее ➡️', 'r:nx', 'ok')];
+};
+R.comment = function (st) {
+  var d = S.draft, kind = d.kind, a = blk(st.i);
+  var h = '<div class="head">' + esc(head(d)) + '</div><h1>' + esc(block(kind, st.i).title) + '</h1><div class="note warn">❌ ' + esc(blockLine(kind, st.i, a)) + '</div>';
+  h += '<div class="sub">Комментарий и фото — по желанию.</div><textarea class="inp" data-bind="comment" placeholder="Комментарий">' + esc(a.comment || '') + '</textarea>';
+  h += photoBlock(a, 'comment');
+  return [h, BACK() + B('Готово ➡️', 'c:done', 'ok')];
+};
+R.summary = function () {
+  var d = S.draft, kind = d.kind; delete d.ret;
+  var h = '<div class="head">' + (d.uid ? 'Исправление записи' : 'Проверьте перед сохранением') + '</div><h1>' + esc(head(d)) + '</h1>';
+  var items = [];
+  if (kind === 'apt') items.push([esc(labelOf(K.apt.statuses, d.status) || 'Статус не выбран'), 'sm:st']);
+  var urgent = [];
+  if (kind === 'apt' && d.track === 'self' && inspected(d.status)) {
+    items.push(['Помещения: ' + esc((d.present || []).join(', ')), 'sm:rooms']);
+    var ea = d.blocks.entry || {}, eb = block('apt', bindex('apt', 'entry'));
+    items.push([ea.r === 'ok' ? '✅ ' + esc(eb.title) : ea.r === 'problem' ? '❌ <b>' + esc(eb.title) + '</b>: ' + esc(blockLine('apt', bindex('apt', 'entry'), ea)) : ea.r === 'skip' ? '⏭ ' + esc(eb.title) + ': пропущено' : '▫️ ' + esc(eb.title) + ': <b>не проверено</b>', 'sm:' + bindex('apt', 'entry')]);
+    (ea.p || []).forEach(function (p) { if (isUrgent('apt', 'entry', p)) urgent.push(eb.title + ': ' + low(plabel('apt', 'entry', p))); });
+    (d.present || []).forEach(function (room) {
+      var stt = roomState(d, room), parts = [], miss = [];
+      roomBlocks(room).forEach(function (b) {
+        var a = d.rb && d.rb[room] && d.rb[room][b.code];
+        if (!a || !a.r) { miss.push(b.title); return; }
+        if (a.r === 'problem') {
+          parts.push(b.title + ' — ' + selfLine(room, b.code, a) + ((a.photos || []).length ? ' 📷' + a.photos.length : ''));
+          if (b.type === 'units') Object.keys(a.units || {}).forEach(function (u) { (a.units[u].p || []).forEach(function (p) { if (isUrgent('apt', b.code, p, u)) urgent.push(room + ': ' + low(ulabel('apt', b.code, u)) + ' — ' + low(plabel('apt', b.code, p, u))); }); });
+          else (a.p || []).forEach(function (p) { if (isUrgent('apt', b.code, p)) urgent.push(room + ': ' + b.title + ' — ' + low(plabel('apt', b.code, p))); });
+        }
+      });
+      var t = (parts.length ? '❌ <b>' + esc(room) + '</b>: ' + esc(parts.join('; ')) : (stt.done === stt.total ? '✅ ' + esc(room) : '▫️ ' + esc(room)));
+      if (miss.length) t += '<br><span class="small"><b>не проверено:</b> ' + esc(miss.join(', ')) + '</span>';
+      items.push([t, 'sm:r:' + room]);
+    });
+    var fb = blocks('apt').filter(function (b) { return b.type === 'free'; })[0];
+    if (fb) { var fa = d.blocks[fb.code] || {}; items.push(['📝 ' + esc(selfCfg().free_title || fb.title) + ': ' + (fa.text ? esc('«' + fa.text + '»') : 'нет'), 'sm:' + bindex('apt', fb.code)]); }
+  } else if (kind === 'mop' || inspected(d.status)) {
+    blocks(kind).forEach(function (b, i) {
+      var a = d.blocks[b.code] || {}, r = a.r, t;
+      var ph = (a.photos || []).length ? ' 📷 ' + a.photos.length : '';
+      if (b.type === 'free') t = r === 'text' ? '📝 ' + esc(b.title) + ': ' + esc(a.text ? '«' + a.text + '»' : '') + ph : (r === 'skip' ? '⏭ ' + esc(b.title) + ': нечего добавить' : '▫️ ' + esc(b.title) + ': <b>не заполнено</b>');
+      else if (r === 'ok') t = '✅ ' + esc(b.title);
+      else if (r === 'skip') t = '⏭ ' + esc(b.title) + ': пропущено';
+      else if (r === 'na') t = '➖ ' + esc(b.title) + ': ' + esc(low(b.na || ''));
+      else if (r === 'problem') {
+        t = '❌ <b>' + esc(b.title) + '</b>: ' + esc(blockLine(kind, i, a)) + (a.comment ? '<br><span class="small">💬 ' + esc(a.comment) + '</span>' : '') + ph;
+        if (b.type === 'units') Object.keys(a.units || {}).forEach(function (u) { (a.units[u].p || []).forEach(function (p) { if (isUrgent(kind, b.code, p, u)) urgent.push(b.title + ': ' + low(ulabel(kind, b.code, u)) + ' — ' + low(plabel(kind, b.code, p, u))); }); });
+        else (a.p || []).forEach(function (p) { if (isUrgent(kind, b.code, p)) urgent.push(b.title + ': ' + low(plabel(kind, b.code, p))); });
+      } else t = '▫️ ' + esc(b.title) + ': <b>не заполнено</b>';
+      items.push([t, 'sm:' + i]);
+    });
+  }
+  h += '<div class="sum">' + items.map(function (x) { return '<div class="it"><div class="t">' + x[0] + '</div><button class="e" data-a="' + x[1] + '">Изменить</button></div>'; }).join('') + '</div>';
+  if (urgent.length) h += '<div class="note warn">⚠️ <b>Срочное:</b> ' + esc(urgent.join('; ')) + '</div>';
+  h += B('💾 Сохранить', 'sm:save', 'ok');
+  h += B(d.uid ? '🗑 Отменить изменения' : '🗑 Удалить черновик', 'sm:del', 'ghost');
+  return [h, BACK()];
+};
+R.confirm_del = function () {
+  var d = S.draft;
+  return ['<h1>' + (d && d.uid ? 'Отменить изменения?' : 'Удалить черновик?') + '</h1><div class="sub">' + esc(d ? head(d) : '') + '</div>' + B('Да', 'dl:y', 'bad') + B('Нет, назад', 'bk', 'c'), ''];
+};
+R.saved = function (st) {
+  var r = RECS[st.uid];
+  if (!r) { S.step = {s: 'menu'}; return R.menu(); }
+  var what = r.kind === 'apt' ? 'кв. ' + r.apt + (r.status !== 'surveyed' ? ' — ' + low(labelOf(K.apt.statuses, r.status)) : '') : 'МОП, секция ' + r.sec + ', этаж ' + r.floor;
+  var h = '<h1>✅ Сохранено: ' + esc(what) + '</h1>';
+  if (r.kind === 'mop' || inspected(r.status)) h += '<div class="sub">Замечаний: ' + countIssues(r) + '</div>';
+  h += '<div class="small">Запись хранится в телефоне. Сдайте записи в конце дня.</div>';
+  if (r.kind === 'apt') {
+    var nx = APTS.filter(function (a) { return a[1] === r.sec && a[0] > r.apt; })[0];
+    if (nx) h += B('➡️ Кв. ' + nx[0], 'nx:' + nx[0], 'ok');
+    h += B('🔢 Другая квартира', 'na:other', 'c');
+  } else {
+    var fls = K.mop.floors;
+    if (r.floor < fls[fls.length - 1]) h += B('➡️ Этаж ' + (r.floor + 1), 'nf:' + (r.floor + 1), 'ok');
+    h += B('🔢 Другой этаж', 'na:other', 'c');
+  }
+  h += '<div class="row2">' + B('↩️ Исправить', 'op:' + r.uid, 'c') + B('🏠 Меню', 'm:menu', 'c') + '</div>';
+  return [h, ''];
+};
+R.records = function () {
+  var rs = recList().sort(function (a, b) { return a.saved < b.saved ? 1 : -1; });
+  if (!rs.length) return ['<h1>Записей пока нет</h1>', BACK()];
+  var h = '<h1>Записи на телефоне: ' + rs.length + '</h1><div class="sub"><span class="dot" style="display:inline-block"></span> не сдано, <span class="dot sent" style="display:inline-block"></span> сдано. Нажмите, чтобы исправить.</div><div class="list">';
+  var day = '';
+  rs.forEach(function (r) {
+    var dd = r.saved.slice(0, 10);
+    if (dd !== day) { day = dd; h += '<h2>' + dd.slice(8, 10) + '.' + dd.slice(5, 7) + '.' + dd.slice(0, 4) + '</h2>'; }
+    var lab = r.kind === 'apt' ? 'Кв. ' + r.apt + ': ' + low(labelOf(K.apt.statuses, r.status)) : 'МОП с. ' + r.sec + ', эт. ' + r.floor;
+    var n = countIssues(r);
+    h += '<button class="btn" data-a="op:' + r.uid + '"><span class="dot' + (unsent(r) ? '' : ' sent') + '"></span><span>' + esc(lab) + (n ? ', ❌ ' + n : '') + '</span><span class="small" style="margin-left:auto">' + r.saved.slice(11, 16) + '</span></button>';
+  });
+  return [h + '</div>', BACK()];
+};
+R.send = function (st) {
+  var all = recList(), un = all.filter(unsent), list = toSend(st.all);
+  var h = '<h1>Сдать записи</h1>';
+  h += '<div class="sub">На телефоне записей: ' + all.length + ', не сдано: ' + un.length + '.</div>';
+  if (!PREP) {
+    if (!list.length) h += '<div class="note okn">Всё уже сдано.</div>';
+    else h += '<div class="note">В файл попадёт записей: <b>' + list.length + '</b>. Его нужно передать так, как договорились: почтой, через AirDrop или мессенджер.</div>' + B('📦 Подготовить файл', 'sd:prep', 'ok');
+    h += T('Сдать все записи заново (если прошлый файл потерялся)', 'sd:all', !!st.all);
+    return [h, BACK()];
+  }
+  h += '<div class="note">Готово файлов: ' + PREP.length + '. Для каждого: «Поделиться» → выберите почту, AirDrop или мессенджер → отправьте. Нет связи — «Сохранить файл» и отправьте позже. Потом нажмите «Отправил».</div>';
+  PREP.forEach(function (p, k) {
+    h += '<h2>' + (PREP.length > 1 ? 'Файл ' + (k + 1) + ' из ' + PREP.length + ': ' : '') + 'записей ' + p.n + ', фото ' + p.photos + ', ' + (p.size < 1048576 ? Math.max(1, Math.round(p.size / 1024)) + ' КБ' : (p.size / 1048576).toFixed(1) + ' МБ') + '</h2>';
+    if (p.done) { h += '<div class="note okn">✅ Отмечено как отправленное</div>'; return; }
+    h += '<div class="row2">' + B('📤 Поделиться', 'sd:share:' + k, 'ok') + B('💾 Сохранить файл', 'sd:dl:' + k, 'c') + '</div>';
+    h += B('✔️ Отправил' + (p.shared ? '' : ' (нажмите после отправки)'), 'sd:done:' + k, p.shared ? 'on' : '');
+  });
+  return [h, BACK()];
+};
+R.settings = function () {
+  var h = '<h1>Настройки</h1><div class="sub">Имя обходчика (для подписи файла):</div>';
+  h += '<input class="inp" data-bind="name" value="' + esc(name()) + '" placeholder="Например, Иванов">';
+  h += B('Готово', 'set:ok', 'ok');
+  h += '<h2>Память телефона</h2><div class="sub" id="quota">Записей: ' + recList().length + '</div>';
+  h += B('🧹 Удалить с телефона отправленные записи', 'set:clean', 'c');
+  h += '<div class="small">Версия анкеты ' + esc(VERSION) + '</div>';
+  return [h, name() ? BACK() : ''];
+};
+R.confirm_clean = function () {
+  var n = recList().filter(function (r) { return !unsent(r); }).length;
+  return ['<h1>Удалить отправленные записи с телефона?</h1><div class="sub">Их ' + n + '. Несданные не трогаются.</div>' + B('Да, удалить', 'cl:y', 'bad') + B('Нет', 'bk', 'c'), ''];
+};
+
+R.self_rooms = function () {
+  var d = S.draft, cfg = selfCfg();
+  var h = '<div class="head">' + esc(head(d)) + ', обход без жильцов</div><h1>Какие помещения есть?</h1><div class="note">' + esc(cfg.hint || '') + '</div>';
+  h += cfg.rooms.map(function (r, k) { return T(r, 'sr:t:' + k, (d.present || []).indexOf(r) >= 0); }).join('');
+  return [h, BACK() + B('Далее ➡️', 'sr:nx', 'ok')];
+};
+R.self_hub = function () {
+  var d = S.draft;
+  var h = '<div class="head">' + esc(head(d)) + '</div><h1>Обход без жильцов</h1><div class="sub">' + esc(selfCfg().hint || '') + '</div>';
+  var ea = d.blocks.entry || {}, eb = block('apt', bindex('apt', 'entry'));
+  h += B((ea.r === 'ok' ? '✅ ' : ea.r === 'problem' ? '❌ ' : '▫️ ') + esc(eb.title) + (ea.r ? '' : ' <span class="tag">не проверено</span>'), 'sh:entry');
+  (d.present || []).forEach(function (room, k) {
+    var stt = roomState(d, room);
+    var mark = stt.done === 0 ? '▫️ ' : stt.bad ? '❌ ' : stt.done === stt.total ? '✅ ' : '◐ ';
+    var tag = stt.done === 0 ? 'не проверено' : stt.done < stt.total ? 'проверено ' + stt.done + ' из ' + stt.total : (stt.bad ? 'замечаний: ' + stt.bad : '');
+    h += B(mark + esc(room) + (tag ? ' <span class="tag">' + tag + '</span>' : ''), 'sh:r:' + k);
+  });
+  var fb = blocks('apt').filter(function (b) { return b.type === 'free'; })[0], fa = fb ? (d.blocks[fb.code] || {}) : {};
+  if (fb) h += B('📝 ' + esc(selfCfg().free_title || fb.title) + (fa.text ? ' ✓' : ''), 'sh:free', 'c');
+  h += B('✏️ Изменить список помещений', 'sh:rooms', 'ghost');
+  return [h, BACK() + B('Готово ➡️', 'sh:done', 'ok')];
+};
+R.self_room = function (st) {
+  var d = S.draft, room = st.room;
+  var h = '<div class="head">' + esc(head(d)) + '</div><h1>' + esc(room) + '</h1><div class="sub">✅ — в порядке, ❌ — есть замечания.</div>';
+  roomBlocks(room).forEach(function (b) {
+    var a = d.rb && d.rb[room] && d.rb[room][b.code], r = a && a.r;
+    var line = r === 'problem' ? '<span class="small">❌ ' + esc(selfLine(room, b.code, a)) + '</span>' : (r === 'ok' ? '<span class="small">в порядке</span>' : '');
+    h += '<div class="rowc' + (r === 'ok' ? ' okr' : r === 'problem' ? ' bdr' : '') + '"><div class="lb">' + esc(b.title) + line + '</div>' +
+      B('✅', 'so:ok:' + b.code, r === 'ok' ? 'ok' : '') + B('❌', 'so:pb:' + b.code, r === 'problem' ? 'bad' : '') + '</div>';
+  });
+  var stt = roomState(d, room);
+  if (stt.done < stt.total) h += B('✅ Остальное в порядке', 'so:rest', 'ok');
+  return [h, BACK() + (stt.done === stt.total ? B('Готово ➡️', 'so:done', 'ok') : '')];
+};
+R.self_units = function (st) {
+  var d = S.draft, b = block('apt', bindex('apt', st.code)), a = selfAns(st.room, st.code);
+  var h = '<div class="head">' + esc(head(d)) + ', ' + esc(st.room) + '</div><h1>' + esc(b.title) + '</h1><div class="sub">Отметьте технику, с которой что-то не так.</div>';
+  h += (b.units || []).map(function (u) { return T(u.label, 'u:' + u.code, !!a.units[u.code]); }).join('');
+  return [h, BACK() + B('Далее ➡️', 'un:nx', 'ok')];
+};
+R.self_probs = function (st) {
+  var d = S.draft, b = block('apt', bindex('apt', st.code)), a = selfAns(st.room, st.code);
+  var tg = st.u ? (a.units[st.u] || (a.units[st.u] = {p: []})) : a, i = bindex('apt', st.code);
+  var h = '<div class="head">' + esc(head(d)) + ', ' + esc(st.room) + '</div><h1>' + esc(b.title + (st.u ? ': ' + ulabel('apt', st.code, st.u) : '')) + '</h1><div class="sub">Что не так? Можно отметить несколько.</div>';
+  h += problems('apt', i, st.u).map(function (p) { return T(p.label, 'p:' + p.code, tg.p.indexOf(p.code) >= 0, p.urgent ? 'срочно' : ''); }).join('');
+  var oth = tg.p.indexOf('other') >= 0;
+  h += T('Другое (вписать)', 'p:other', oth);
+  if (oth) h += '<input class="inp" data-bind="sother" placeholder="Что не так" value="' + esc(tg.other || '') + '">';
+  return [h, BACK() + B('Далее ➡️', 'p:nx', 'ok')];
+};
+R.self_comment = function (st) {
+  var d = S.draft, b = block('apt', bindex('apt', st.code)), a = selfAns(st.room, st.code);
+  var h = '<div class="head">' + esc(head(d)) + ', ' + esc(st.room) + '</div><h1>' + esc(b.title) + '</h1><div class="note warn">❌ ' + esc(selfLine(st.room, st.code, a)) + '</div>';
+  h += '<div class="sub">Комментарий и фото — по желанию.</div><textarea class="inp" data-bind="scomment" placeholder="Комментарий">' + esc(a.comment || '') + '</textarea>';
+  h += photoBlock(a, 'comment');
+  return [h, BACK() + B('Готово ➡️', 'c:done', 'ok')];
+};
+R.lock = function (st) {
+  var h = '<h1>Обход</h1><div class="sub">Введите код доступа. Его нужно ввести один раз.</div>';
+  if (st && st.err) h += '<div class="err">❗ ' + esc(st.err) + '</div>';
+  h += '<input class="inp big" inputmode="numeric" pattern="[0-9]*" autocomplete="off" data-bind="code" value="' + esc((st && st.val) || '') + '" placeholder="Код">';
+  h += B('Войти', 'lk:go', 'ok');
+  return [h, ''];
+};
+
+function isStandalone() { return (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || window.navigator.standalone === true; }
+function installHint() {
+  var ua = navigator.userAgent || '';
+  if (/iPhone|iPad|iPod/.test(ua)) return 'в Safari «⋯» справа от адреса → «Поделиться» → «На экран „Домой“» → «Добавить» (в старых iOS кнопка «Поделиться» сразу внизу). Потом откройте анкету с иконки, пока есть интернет.';
+  return 'в Chrome меню ⋮ → «Добавить на главный экран».';
+}
+
+// ------------------------------------------------------------------ отрисовка и события
+var app = document.getElementById('app'), bar = document.getElementById('bar');
+var LOCK = {val: '', err: ''};
+function render(note) {
+  var out;
+  if (!K) {
+    out = R.lock(LOCK);
+  } else {
+    if (!name() && S.step.s !== 'settings') { S.step = {s: 'settings'}; S.stack = []; }
+    var fn = R[S.step.s] || R.menu;
+    out = fn(S.step);
+  }
+  app.innerHTML = (note ? '<div class="note warn">' + esc(note) + '</div>' : '') + out[0] + (busy ? '<div class="note">⏳ Подождите…</div>' : '');
+  bar.innerHTML = out[1] || '';
+  bar.style.display = out[1] ? 'flex' : 'none';
+  lastRender = Date.now();
+  if (K) saveSession();
+  fillThumbs();
+}
+function tryUnlock(code, silent) {
+  busy = true; if (!silent) render();
+  return unlock(code).then(function (data) {
+    initData(data); LS.set('ob_code', code); LOCK = {val: '', err: ''}; busy = false;
+    if (S.step.s === 'send' || S.step.s === 'saved' && !RECS[S.step.uid]) { S.step = {s: 'menu'}; S.stack = []; }
+    render();
+  }, function () {
+    busy = false; LS.set('ob_code', ''); LOCK.err = silent ? '' : 'Неверный код'; render();
+  });
+}
+function onTap(e) {
+  var el = e.target.closest('[data-a]');
+  if (el) {
+    e.preventDefault();
+    if (busy) return;
+    if (Date.now() - lastRender < 350) return;     // защита от двойного нажатия
+    if (!K) { if (el.getAttribute('data-a') === 'lk:go') tryUnlock(String(LOCK.val || '').trim(), false); return; }
+    var before = S.step;
+    var res = act(el.getAttribute('data-a'));
+    render();
+    if (res) { if (res.charAt(0) === '!') alert(res.slice(1)); else render(res); }
+    if (S.step !== before) window.scrollTo(0, 0);
+    return;
+  }
+  var del = e.target.closest('[data-del]');
+  if (del && S.draft && (S.step.i !== undefined || S.step.s === 'self_comment')) {
+    var k = +del.getAttribute('data-del'), a = curTarget();
+    if (confirm('Удалить это фото?')) { a.photos.splice(k, 1); render(); }
+  }
+}
+document.addEventListener('click', function (e) { if (e.target.closest('#app') || e.target.closest('#bar')) onTap(e); });
+document.addEventListener('input', function (e) {
+  var k = e.target.getAttribute && e.target.getAttribute('data-bind');
+  if (!k) return;
+  var v = e.target.value, st = S.step;
+  if (k === 'code') { LOCK.val = v; return; }
+  if (k === 'aptnum') st.val = v;
+  else if (k === 'name') LS.set('ob_name', v.trim());
+  else if (k === 'comment') blk(st.i).comment = v;
+  else if (k === 'free') { var a = blk(st.i); a.text = v; }
+  else if (k === 'other') { var a2 = blk(st.i); var tg = st.u ? a2.units[st.u] : a2; tg.other = v; }
+  else if (k === 'scomment') selfAns(st.room, st.code).comment = v;
+  else if (k === 'sother') { var a4 = selfAns(st.room, st.code); (st.u ? a4.units[st.u] : a4).other = v; }
+  saveSession();
+});
+document.addEventListener('keydown', function (e) {
+  if (e.key === 'Enter' && e.target.getAttribute && e.target.getAttribute('data-bind') === 'aptnum') { e.preventDefault(); act('ai:go'); render(); }
+  if (e.key === 'Enter' && e.target.getAttribute && e.target.getAttribute('data-bind') === 'code') { e.preventDefault(); tryUnlock(String(LOCK.val || '').trim(), false); }
+});
+document.addEventListener('change', function (e) {
+  var k = e.target.getAttribute && e.target.getAttribute('data-photo');
+  if (!k || !S.draft) return;
+  addPhotos(e.target.files, curTarget());
+  e.target.value = '';
+});
+
+// ------------------------------------------------------------------ запуск
+function start() {
+  idbOpen().then(function () { return idbAll('records'); }).then(function (rs) {
+    rs.forEach(function (r) { RECS[r.uid] = r; });
+    if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(function () {});
+    var code = LS.get('ob_code', '');
+    if (code) tryUnlock(code, true); else render();
+    setTimeout(function () { if (K) gcPhotos(); }, 4000);
+  }, function (e) {
+    app.innerHTML = '<div class="note warn">Браузер не даёт сохранять данные (' + esc(e && e.message) + '). Откройте анкету в Safari или Chrome, не в режиме инкогнито.</div>';
+  });
+  if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+    var hadCtrl = !!navigator.serviceWorker.controller;
+    navigator.serviceWorker.register('sw.js').then(function (reg) {
+      reg.addEventListener('updatefound', function () {
+        var w = reg.installing;
+        w && w.addEventListener('statechange', function () {
+          if (w.state === 'activated' && hadCtrl) {
+            var u = document.createElement('div'); u.className = 'upd';
+            u.innerHTML = 'Загружена новая версия анкеты.<button>Обновить</button>';
+            u.querySelector('button').onclick = function () { location.reload(); };
+            document.body.appendChild(u);
+          }
+        });
+      });
+    }).catch(function () {});
+  }
+}
+start();
+</script>
+</body>
+</html>
